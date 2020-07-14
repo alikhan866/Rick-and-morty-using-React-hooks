@@ -35,11 +35,19 @@ function App() {
       urlQuery={urlQuery}
       url={url}
       />
+    <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
       <Pagination
         postsPerPage={postsPerPage}
         totalPosts={36}
         paginate={paginate}
       />
+    </div>
     </div>
   );
 }
