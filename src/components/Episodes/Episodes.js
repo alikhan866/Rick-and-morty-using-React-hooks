@@ -15,16 +15,18 @@ const Episodes = (props) => {
     const { serverCall } = props
     const { setServerCall } = props
     const { userSearchValue } = props
-    const {setUrlQuery} = props
-    const {error} = props
-    const {setError} = props
+    const { setUrlQuery } = props
+    const { error } = props
+    const { setError } = props
 
     useEffect(() => {
         if (serverCall) {
             setUrl(nextResponse)
             setServerCall(false)
         }
-        if (url && userSearchValue == '') {
+        if (url && userSearchValue === '') {
+            
+            console.log(url)
             axios.get(url)
                 .then((response) => {
                     setError(false)
@@ -34,7 +36,7 @@ const Episodes = (props) => {
                     setListOfEpisodes([...listOfEpisodes, ...transformedResponse])
                 })
         }
-    }, [url, setTotalPosts, serverCall,userSearchValue])
+    }, [url, setTotalPosts, serverCall, userSearchValue])
 
 
     useEffect(() => {
@@ -52,9 +54,9 @@ const Episodes = (props) => {
                         const transformedResponse = response.data.results
                         setFilteredListOfEpisodes([...filteredListOfEpisodes, ...transformedResponse])
                     })
-                .catch((err) => {
-                    setError(true)
-                })
+                    .catch((err) => {
+                        setError(true)
+                    })
             }
         }
 
@@ -62,7 +64,7 @@ const Episodes = (props) => {
 
     let episodes
 
-    if(userSearchValue === '') {
+    if (userSearchValue === '') {
         episodes = (
             <div>
                 {listOfEpisodes ? listOfEpisodes.map((resp, index) => {
@@ -104,10 +106,10 @@ const Episodes = (props) => {
     return (
         <div>
             {error
-            ?<h2>
-                No such episode found please enter a valid episode name
+                ? <h2>
+                    No such episode found please enter a valid episode name
             </h2>
-            :episodes}
+                : episodes}
         </div>
     )
 }
