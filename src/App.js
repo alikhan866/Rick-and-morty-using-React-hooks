@@ -15,8 +15,9 @@ function App() {
   const [error, setError] = useState(null)
   const [lastPost, setLastPost] = useState(postsPerPage - 1)
   const [firstPost, setFirstPost] = useState(lastPost - postsPerPage)
-
   const [serverCall, setServerCall] = useState(false)
+
+  const [pageAtServerCall, setPageAtServerCall] = useState([])
 
   useEffect(() => {
     setUrl(`https://rickandmortyapi.com/api/episode/`)
@@ -26,6 +27,21 @@ function App() {
     setUrlQuery(`https://rickandmortyapi.com/api/episode?name=${userSearchValue}`)
   }, [userSearchValue])
 
+
+  useEffect(() => {
+    const serverCallPage = []
+
+    serverCallPage.push((20 / postsPerPage) + 1)
+    for (var i = 0; i < (totalPosts / postsPerPage) - 1; i++) {
+      if (serverCallPage.indexOf(serverCallPage[0] + i * (20 / postsPerPage)) === -1) {
+        serverCallPage.push(serverCallPage[0] + i * (20 / postsPerPage))
+      }
+    }
+
+    setPageAtServerCall(serverCallPage)
+
+  }, [totalPosts, postsPerPage])
+
   const handleButtonClick = (searchValue) => {
     setUserSearchValue(searchValue);
   }
@@ -33,18 +49,18 @@ function App() {
   const pageChangeHandler = (pageNumber) => {
     const indexOfLastPost = (pageNumber * postsPerPage) - 1
     const indexOfFirstPost = indexOfLastPost - postsPerPage + 1
-    const pagesAtServerCall = []
-    pagesAtServerCall.push((20 / postsPerPage) + 1)
-    for (var i = 0; i < totalPosts / postsPerPage; i++) {
-      pagesAtServerCall.push(pagesAtServerCall[0] + i * (20 / postsPerPage))
-    }
+    const index = pageAtServerCall.indexOf(pageNumber)
 
-    pagesAtServerCall.map((pageAtServerCall) => {
+    pageAtServerCall.map((pageAtServerCall) => {
       if (pageNumber === pageAtServerCall) {
         setServerCall(true)
       }
     })
-
+    console.log("PAGE NUMBER", pageNumber)
+    if (index !== -1) {
+      pageAtServerCall.splice(index, 1)
+    }
+    console.log(pageAtServerCall)
     setFirstPost(indexOfFirstPost)
     setLastPost(indexOfLastPost)
   }
@@ -55,20 +71,20 @@ function App() {
         onButtonClick={handleButtonClick}
       />
 
-       <Episodes
-          urlQuery={urlQuery}
-          url={url}
-          setTotalPosts={setTotalPosts}
-          firstPost={firstPost}
-          lastPost={lastPost}
-          setUrl={setUrl}
-          serverCall={serverCall}
-          setServerCall={setServerCall}
-          userSearchValue={userSearchValue}
-          setUrlQuery={setUrlQuery}
-          error={error}
-          setError={setError}
-        />
+      <Episodes
+        urlQuery={urlQuery}
+        url={url}
+        setTotalPosts={setTotalPosts}
+        firstPost={firstPost}
+        lastPost={lastPost}
+        setUrl={setUrl}
+        serverCall={serverCall}
+        setServerCall={setServerCall}
+        userSearchValue={userSearchValue}
+        setUrlQuery={setUrlQuery}
+        error={error}
+        setError={setError}
+      />
       <div
         style={{
           display: "flex",
