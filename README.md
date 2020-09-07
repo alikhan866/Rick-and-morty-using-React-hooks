@@ -6,4 +6,4 @@ Uses axios to get data from https://rickandmortyapi.com render them in a list of
 
 ### CodeSandBox Link
 
-https://4e3t2.csb.app
+https://e7qxz.csb.app/
